@@ -49,9 +49,28 @@ class Game extends Component {
 
 const GameWithRouter = withRouter(Game);
 
+class Test extends Component {
+  componentWillUnmount() {
+    const {history, location} = this.props;
+    // notice: before unmount the history.location.pathname is already the next one. (because history is mutable).
+    // but the location.pathname is still the old one (because location is immutable)
+    console.log(history.location.pathname);
+    console.log(location.pathname);
+  }
+
+  render() {
+    if (this.props.a) {
+      this.props.a = 2;
+    }
+    return (
+      <div>Test</div>
+    );
+  }
+}
+
 class App extends Component {
   state = {
-
+    value1: 1,
   }
 
   componentDidMount() {
@@ -69,6 +88,7 @@ class App extends Component {
             <Link style={{width: '100px'}} to="/user">User</Link>
             <Link style={{width: '100px'}} to="/whatever">Whatever</Link>
             <Link style={{width: '100px'}} to="/redi">Redirect</Link>
+            <Link style={{width: '100px'}} to="/test">test</Link>
           </div>
           <GameWithRouter wrappedComponentRef={(el) => this.game = el} />
           <Route path="/hello" component={Hello} />
@@ -88,6 +108,7 @@ class App extends Component {
             )}
           />
           <FadingRoute comp={Fade} path="/fade" />
+          <Route path="/test" component={Test} />
         </div>
       </BrowserRouter>
     );
